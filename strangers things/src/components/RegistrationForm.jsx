@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
@@ -18,16 +17,21 @@ const RegistrationForm = () => {
       setErrorMessage('Please fill out all fields correctly.');
       return;
     }
-
     try {
-      const response = await axios.post(`${BASE_URL}/users/register`, {
-        user: {
-          username,
-          password,
+      const response = await fetch(`${BASE_URL}/users/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          user: {
+            username,
+            password,
+          },
+        }),
       });
-      const token = response.data.data.token;
-      // Save the token in state and sessionStorage (optional)
+
+      const data = await response.json();
     } catch (error) {
       setErrorMessage('Error creating user. Please try again.');
       console.error('Registration error:', error);

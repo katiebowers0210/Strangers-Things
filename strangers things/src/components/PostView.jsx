@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
 
-const PostView = () => {
+function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,11 +11,17 @@ const PostView = () => {
     // Function to fetch the posts from the server
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/posts`);
-        setPosts(response.data.data.posts);
+        const response = await fetch(`${BASE_URL}/posts`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+
+        const data = await response.json();
+        setPosts(data.data.posts);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching posts:', error);
+        setLoading(false);
       }
     };
 
@@ -45,6 +50,6 @@ const PostView = () => {
       )}
     </div>
   );
-};
+}
 
-export default PostView;
+export default App;

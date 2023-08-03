@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { logIn } from './AuthHelpers'; // Import the logIn function
 
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
@@ -19,14 +19,20 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await axios.post(`${BASE_URL}/users/login`, {
-        user: {
-          username,
-          password,
+      const response = await fetch(`${BASE_URL}/users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          user: {
+            username,
+            password,
+          },
+        }),
       });
-      const token = response.data.data.token;
-      logIn(token); // Call the logIn function to set the token in state and sessionStorage
+
+      const data = await response.json();
     } catch (error) {
       setErrorMessage('Invalid credentials. Please try again.');
       console.error('Login error:', error);
