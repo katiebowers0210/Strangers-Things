@@ -1,31 +1,57 @@
-// authHelpers.js
-const TOKEN_KEY = 'myAppAuthToken';
+const COHORT_NAME = '2306-FTB-ET-WEB-FT';
+const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
+
+export const makeHeaders = () => {
+  const token = getToken();
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+};
+
+export const getToken = () => {
+  return sessionStorage.getItem('token') || '';
+};
 
 export const logIn = (token) => {
-  // Set the token in state and optionally in sessionStorage
-  localStorage.setItem(TOKEN_KEY, token);
+  sessionStorage.setItem('token', token);
 };
 
 export const logOut = () => {
-  // Clear the token from state and optionally from sessionStorage
-  localStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem('token');
 };
 
 export const isLoggedIn = () => {
-  // Check if the token is present in state (and optionally in sessionStorage)
-  return !!localStorage.getItem(TOKEN_KEY);
+  const token = getToken();
+  return !!token;
 };
 
-export const makeHeaders = () => {
-  // Create a headers object with or without the bearer token depending on whether the user is logged in
-  const headers = {
-    'Content-Type': 'application/json',
-  };
+export const onLogin = async (username, password) => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user: {
+          username,
+          password,
+        },
+      }),
+    });
 
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
+    const data = await response.json();
+    if (response.ok) {
+      const token = data.data.token;
+      logIn(token); // Call the logIn function to store the token
+      console.log('Login successful:', data.data.message);
+    } else {
+      console.error('Login error:', data.error.message);
+      throw new Error('Login failed');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
   }
-
-  return headers;
 };

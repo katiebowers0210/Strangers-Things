@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { logIn } from './AuthHelpers';
 
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
@@ -17,6 +18,7 @@ const RegistrationForm = () => {
       setErrorMessage('Please fill out all fields correctly.');
       return;
     }
+
     try {
       const response = await fetch(`${BASE_URL}/users/register`, {
         method: 'POST',
@@ -32,6 +34,17 @@ const RegistrationForm = () => {
       });
 
       const data = await response.json();
+      console.log('Response:', response);
+      console.log('Data:', data);
+
+      if (response.ok) {
+        const token = data.data.token;
+        logIn(token); // Save the token to state and sessionStorage
+        console.log('Registration successful:', data.data.message);
+      } else {
+        setErrorMessage('Registration failed. Please try again.');
+        console.error('Registration error:', data.error.message);
+      }
     } catch (error) {
       setErrorMessage('Error creating user. Please try again.');
       console.error('Registration error:', error);
@@ -56,7 +69,6 @@ const RegistrationForm = () => {
         </div>
         <button type="submit">Register</button>
       </form>
-      {errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 };

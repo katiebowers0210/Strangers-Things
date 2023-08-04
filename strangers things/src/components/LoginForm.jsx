@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { logIn } from './AuthHelpers'; // Import the logIn function
+import { onLogin } from './AuthHelpers'; // Import the logIn function
 
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
@@ -11,7 +11,7 @@ const LoginForm = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    setErrorMessage('');
+  
 
     if (!username || !password) {
       setErrorMessage('Please fill out all fields.');
@@ -33,6 +33,15 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
+      if (response.ok) {
+        const token = data.data.token;
+        onLogin(token);
+        onLogin();
+        console.log('Login successful:', data.data.message);
+      } else {
+        setErrorMessage('Login failed. Please check your credentials.');
+        console.error('Login error:', data.error.message);
+      }
     } catch (error) {
       setErrorMessage('Invalid credentials. Please try again.');
       console.error('Login error:', error);
@@ -53,7 +62,6 @@ const LoginForm = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      {errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 };
