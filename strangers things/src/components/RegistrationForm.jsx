@@ -39,7 +39,7 @@ const RegistrationForm = () => {
 
       if (response.ok) {
         const token = data.data.token;
-        logIn(token); // Save the token to state and sessionStorage
+        logIn(token);
         console.log('Registration successful:', data.data.message);
       } else {
         setErrorMessage('Registration failed. Please try again.');
@@ -53,7 +53,7 @@ const RegistrationForm = () => {
 
   return (
     <div>
-      <h2>Register</h2>
+      <h2>Sign up</h2>
       <form onSubmit={handleRegister}>
         <div>
           <label>Username:</label>
@@ -67,7 +67,7 @@ const RegistrationForm = () => {
           <label>Confirm Password:</label>
           <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">Sign up</button>
       </form>
     </div>
   );

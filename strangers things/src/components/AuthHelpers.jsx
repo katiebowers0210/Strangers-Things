@@ -44,7 +44,7 @@ export const onLogin = async (username, password) => {
     const data = await response.json();
     if (response.ok) {
       const token = data.data.token;
-      logIn(token); // Call the logIn function to store the token
+      logIn(token); 
       console.log('Login successful:', data.data.message);
     } else {
       console.error('Login error:', data.error.message);

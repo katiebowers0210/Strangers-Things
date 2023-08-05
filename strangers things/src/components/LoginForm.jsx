@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { onLogin } from './AuthHelpers'; // Import the logIn function
+import { onLogin } from './AuthHelpers'; 
 
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;

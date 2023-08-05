@@ -38,7 +38,6 @@ const AddPosts = ({ onPostCreated }) => {
 
       const data = await response.json();
       if (response.ok) {
-        // If the post was created successfully, update the state with the new post
         onPostCreated(data.data.post);
         console.log('Listing created:', data.data.post);
       } else {
@@ -53,13 +52,41 @@ const AddPosts = ({ onPostCreated }) => {
     <div>
       <h2>Create New Listing</h2>
       <form onSubmit={handleSubmit}>
-        {/* ... (rest of the form fields) ... */}
+        <label htmlFor="title">Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+
+        <label htmlFor="description">Description:</label>
+        <textarea
+          id="description"
+          name="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+
+        <label htmlFor="price">Price:</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          required
+        />
+
         <button type="submit">Create Listing</button>
       </form>
       {isModalOpen && (
         <div className="modal">
           <p>Please sign in or sign up to create a new listing.</p>
-          {/* Add sign-in and sign-up options here */}
+    
           <button onClick={() => setIsModalOpen(false)}>Close</button>
         </div>
       )}

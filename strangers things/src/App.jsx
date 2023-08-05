@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import PostView from './components/PostView';
 import LoginForm from './components/LoginForm';
-import LogoutButton from './components/LogoutButton';
-import { isLoggedIn } from './components/AuthHelpers';
 import AddPosts from './components/AddPosts';
 // import PostForm from './components/PostForm';
 import RegistrationForm from './components/RegistrationForm';
@@ -22,18 +20,14 @@ function App() {
 
   return (
     <>
-      {isLoggedIn() ? (
-          <LogoutButton /> // Show the LogoutButton if the user is logged in
-        ) : (
           <>
           <h1>Welcome to Strangers Things!</h1>
           <LoginForm />
+          <RegistrationForm />
            <PostView />
-            <RegistrationForm />
             <AddPosts onPostCreated={{addNewPost}}/>
            
           </>
-        )}
       </>
     );
   }
