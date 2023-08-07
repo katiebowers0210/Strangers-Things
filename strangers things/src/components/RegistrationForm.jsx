@@ -9,6 +9,7 @@ const RegistrationForm = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isRegistered, setIsRegistered] = useState(false); 
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -41,6 +42,7 @@ const RegistrationForm = () => {
         const token = data.data.token;
         logIn(token);
         console.log('Registration successful:', data.data.message);
+        setIsRegistered(true); 
       } else {
         setErrorMessage('Registration failed. Please try again.');
         console.error('Registration error:', data.error.message);
@@ -54,6 +56,7 @@ const RegistrationForm = () => {
   return (
     <div>
       <h2>Sign up</h2>
+      {isRegistered && <p>Registration successful. You can now log in.</p>}
       <form onSubmit={handleRegister}>
         <div>
           <label>Username:</label>

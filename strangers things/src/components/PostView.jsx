@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { isLoggedIn, getToken } from './AuthHelpers'; 
+import { isLoggedIn, getToken, makeHeaders } from './AuthHelpers';
+import MessageForm from './MessageForm';
+
 const COHORT_NAME = '2306-FTB-ET-WEB-FT';
 const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
 
 function PostView() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(''); 
-  const userIsLoggedIn = isLoggedIn(); 
-  const token = getToken(); 
+  const [searchTerm, setSearchTerm] = useState('');
+  const userIsLoggedIn = isLoggedIn();
+  const token = getToken();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -48,6 +50,12 @@ function PostView() {
   const filteredPosts = posts.filter((post) => postMatches(post, searchTerm));
   const postsToDisplay = searchTerm.length ? filteredPosts : posts;
 
+  const handleMessageSubmit = () => {
+    // Handle successful message submission
+    // You can do something here, like updating the post list or showing a message
+    console.log('Message sent successfully');
+  };
+
   return (
     <div>
       <h2>Posts</h2>
@@ -69,12 +77,7 @@ function PostView() {
               <p>{post.description}</p>
               <p>Price: {post.price}</p>
               {userIsLoggedIn && !post.isAuthor && token && (
-                <>
-                  <form onSubmit={(event) => handleMessageSubmit(event, post._id)}>
-                    <input type="text" name="message" placeholder="Enter your message" />
-                    <button type="submit">Send Message</button>
-                  </form>
-                </>
+                <MessageForm postId={post._id} onMessageSent={handleMessageSubmit} />
               )}
             </li>
           ))}

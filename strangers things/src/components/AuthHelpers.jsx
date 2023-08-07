@@ -55,3 +55,12 @@ export const onLogin = async (username, password) => {
     throw error;
   }
 };
+
+export const getUserId = () => {
+  const token = getToken();
+  if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId;
+  }
+  return null;
+};
